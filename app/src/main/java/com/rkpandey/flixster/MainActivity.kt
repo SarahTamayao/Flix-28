@@ -22,7 +22,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         rvMovies = findViewById(R.id.rvMovies)
-        val movieAdapter= MovieAdapter(this, movies)
+        val movieAdapter= MovieAdapterComplex(this, movies)
         rvMovies.adapter = movieAdapter
         rvMovies.layoutManager = LinearLayoutManager(this)
 

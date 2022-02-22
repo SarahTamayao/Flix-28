@@ -2,7 +2,6 @@ package com.rkpandey.flixster
 
 import android.content.Context
 import android.content.res.Configuration
-import android.os.Parcelable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,30 +10,28 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 
-
-class MovieAdapter (private val context: Context, private val movies: List<Movie> )
-    : RecyclerView.Adapter<MovieAdapter.ViewHolder>() {
-
+class MovieAdapterComplex(private val context: Context, private val movies: List<Movie> )
+    : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     private val VIEW_TYPE_OVER = 0
     private val VIEW_TYPE_BELOW = 1
-    override fun onCreateViewHolder(viewGroup: ViewGroup, viewType: Int): MovieAdapter.ViewHolder {
-//        val view =LayoutInflater.from(context).inflate(R.layout.item_movie,parent,false)
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val viewHolder: RecyclerView.ViewHolder
-        val inflater = LayoutInflater.from(viewGroup.context)
-        var view = inflater.inflate(R.layout.item_movie, viewGroup, false)
+        val inflater = LayoutInflater.from(parent.context)
+        var view = inflater.inflate(R.layout.item_movie, parent, false)
         when (viewType) {
             VIEW_TYPE_OVER -> {
-                view = inflater.inflate(R.layout.item_movie2, viewGroup, false)
-
+                view = inflater.inflate(R.layout.item_movie2, parent, false)
+                return ViewHolder1(view)
             }
             VIEW_TYPE_BELOW -> {
-                 view = inflater.inflate(R.layout.item_movie, viewGroup, false)
-
+                view = inflater.inflate(R.layout.item_movie, parent, false)
+                return ViewHolder2(view)
             }
             else -> {
-                 view = inflater.inflate(R.layout.item_movie, viewGroup, false)
+                view = inflater.inflate(R.layout.item_movie, parent, false)
 
-             }
+            }
         }
 
         return ViewHolder(view)
@@ -50,33 +47,31 @@ class MovieAdapter (private val context: Context, private val movies: List<Movie
         return -1
     }
 
-    override fun onBindViewHolder(viewHolder: ViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         val movie= movies[position]
-        when (viewHolder.itemViewType) {
+        when (holder.itemViewType) {
             VIEW_TYPE_OVER -> {
-                val vh1 = viewHolder as ViewHolder1
+                val vh1 = holder as ViewHolder1
                 vh1.bind(movie)
 
             }
             VIEW_TYPE_BELOW -> {
-                val vh2 = viewHolder as ViewHolder2
+                val vh2 = holder as ViewHolder2
                 vh2.bind(movie)
             }
             else -> {
-                val vh = viewHolder as ViewHolder
+                val vh = holder as ViewHolder
                 with(vh) {
                     bind(movie)
                 }
             }
         }
-
     }
-
 
     override fun getItemCount(): Int {
         return movies.size
     }
-     inner class ViewHolder(itemView: View): RecyclerView.ViewHolder(itemView){
+    inner class ViewHolder(itemView: View): RecyclerView.ViewHolder(itemView){
         private val tvPoster = itemView.findViewById<ImageView>(R.id.tvPoster)
         private val tvTitle = itemView.findViewById<TextView>(R.id.tvTitle)
         private val tvoverview = itemView.findViewById<TextView>(R.id.tvOverview)
@@ -92,13 +87,16 @@ class MovieAdapter (private val context: Context, private val movies: List<Movie
 
         }
     }
+
     inner class ViewHolder1(itemView: View): RecyclerView.ViewHolder(itemView){
         private val tvPoster = itemView.findViewById<ImageView>(R.id.tvPoster)
         private val tvTitle = itemView.findViewById<TextView>(R.id.tvTitle)
         private val tvoverview = itemView.findViewById<TextView>(R.id.tvOverview)
         fun bind(movie:Movie){
-            tvTitle.text = movie.title
-            tvoverview.text = movie.overview
+            if(tvTitle !== null){
+            tvTitle.text = movie.title}
+            if(tvoverview !== null){
+            tvoverview.text = movie.overview}
             Glide.with(context).load(movie.backdropImageUrl).into(tvPoster)
         }
     }
@@ -113,6 +111,4 @@ class MovieAdapter (private val context: Context, private val movies: List<Movie
             Glide.with(context).load(movie.posterImageUrl).into(tvPoster)
         }
     }
-
-
 }
