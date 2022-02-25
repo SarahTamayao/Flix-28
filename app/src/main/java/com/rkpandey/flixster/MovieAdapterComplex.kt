@@ -9,6 +9,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.request.target.Target.SIZE_ORIGINAL
 
 class MovieAdapterComplex(private val context: Context, private val movies: List<Movie> )
     : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
@@ -97,7 +98,7 @@ class MovieAdapterComplex(private val context: Context, private val movies: List
             tvTitle.text = movie.title}
             if(tvoverview !== null){
             tvoverview.text = movie.overview}
-            Glide.with(context).load(movie.backdropImageUrl).into(tvPoster)
+            Glide.with(context).load(movie.backdropImageUrl).placeholder(R.drawable.ic_launcher_foreground).override(600, 400).into(tvPoster)
         }
     }
 
@@ -108,7 +109,7 @@ class MovieAdapterComplex(private val context: Context, private val movies: List
         fun bind(movie:Movie){
             tvTitle.text = movie.title
             tvoverview.text = movie.overview
-            Glide.with(context).load(movie.posterImageUrl).into(tvPoster)
+            Glide.with(context).load(movie.posterImageUrl).placeholder(R.drawable.ic_launcher_foreground).override(200, 400).into(tvPoster)
         }
     }
 }
