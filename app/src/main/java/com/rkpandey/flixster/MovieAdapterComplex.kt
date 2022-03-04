@@ -1,12 +1,14 @@
 package com.rkpandey.flixster
 
 import android.content.Context
+import android.content.Intent
 import android.content.res.Configuration
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.target.Target.SIZE_ORIGINAL
@@ -89,16 +91,30 @@ class MovieAdapterComplex(private val context: Context, private val movies: List
         }
     }
 
-    inner class ViewHolder1(itemView: View): RecyclerView.ViewHolder(itemView){
+    inner class ViewHolder1(itemView: View): RecyclerView.ViewHolder(itemView), View.OnClickListener{
         private val tvPoster = itemView.findViewById<ImageView>(R.id.tvPoster)
         private val tvTitle = itemView.findViewById<TextView>(R.id.tvTitle)
         private val tvoverview = itemView.findViewById<TextView>(R.id.tvOverview)
+        init {
+            itemView.setOnClickListener(this)
+        }
         fun bind(movie:Movie){
             if(tvTitle !== null){
             tvTitle.text = movie.title}
             if(tvoverview !== null){
             tvoverview.text = movie.overview}
             Glide.with(context).load(movie.backdropImageUrl).placeholder(R.drawable.ic_launcher_foreground).override(600, 400).into(tvPoster)
+        }
+
+        override fun onClick(p0: View?) {
+            // 1. get notified with specific movie which was clicked
+            val movie = movies[adapterPosition]
+            Toast.makeText(context, movie.title, Toast.LENGTH_SHORT).show()
+            // 2. Use the intent to navigate to the new activity
+            val  intent = Intent(context, DetailActivity::class.java)
+
+            intent.putExtra(Movie_Extra, movie)
+            context.startActivity(intent)
         }
     }
 
